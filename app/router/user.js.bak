@@ -1,5 +1,4 @@
 const express = require('express')
-const bcrypt = require('bcrypt')
 const User = require('../model/User')
 const router = express.Router()
 
@@ -61,8 +60,7 @@ router.post('/login', async (req, res) => {
     //     return res.send('token')
     // }
     // 2.5解密
-    let isPassword = bcrypt.compareSync(req.body.password, user.password)
-    
+
     // 返回token
     const token = user._id + '.' + user.username
     res.send(token)
