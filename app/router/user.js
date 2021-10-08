@@ -44,15 +44,15 @@ router.post('/login', async (req, res) => {
 // 验证
 router.get('/verify', async (req, res) => {
     // console.log(req.headers.authorization)
-    // 获取token
+    // 1.获取token
     const token = req.headers.authorization.split(' ')[1]
     const id = token.split('.')[0]
     const username = token.split('.')[1]
     // console.log(token, id, user)
-    // 查询用户是否存在
+    // 2.查询用户是否存在
     const user = await User.findById(id)
     if(!user){ return res.status(422).send('用户错误') }
-    // 查看username
+    // 3.查看username
     if(username !== user.username){
         res.status(422).send('用户错误')
     }else{
