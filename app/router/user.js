@@ -3,26 +3,12 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const User = require('../model/User')
 const router = express.Router()
-
-// 加密加盐
-// const salt = 'defdaczv'
-
-const secret = 'register-rule'
+const { secret } = require('../config/k')
 
 // 定义验证身份中间件
 const isAdmin = async (req, res, next) => {
-    // console.log(req.headers.authorization)
-
-    /*
-    // 1.获取token
-    const token = req.headers.authorization.split(' ')[1]
-    const id = token.split('.')[0]
-    const username = token.split('.')[1]
-    */
-    
     // jwt-token
     const token = req.headers.authorization.split(' ').pop()
-    // console.log(jwt.verify(token, secret))
 
     // 查询用户是否存在
     const { _id, username } = jwt.verify(token, secret)
@@ -39,7 +25,6 @@ const isAdmin = async (req, res, next) => {
         if(user.isAdmin === '0'){
             res.status(409).send('没有权限')
         }else if(user.isAdmin === '1'){
-            // res.send('Admin')
             next()
         }
     }
@@ -47,20 +32,18 @@ const isAdmin = async (req, res, next) => {
 
 // 获取用户列表
 router.get('/', isAdmin, async (req, res) => {
-    // res.send('hello userRouter')
     const list = await User.find()
     res.send(list)
 })
 
 // 注册
 router.post('/register', async (req, res) => {
-    // req.body
-    // newUser({username, password, name, isAdmin})
     const user = await User.findOne({username: req.body.username})
+
     if(user){ return res.status(409).send('该用户已存在') }
-    // 密码加密
 
     const newUser = await new User(req.body).save()
+
     res.send(newUser)
 })
 
@@ -70,18 +53,10 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({username: req.body.username})
 
     if(!user){ return res.status(422).send('该用户不存在') }
-    // 2.用户存在，判断密码
-    // if(req.body.password !== user.password){
 
-    //     return res.status(422).send('密码错误')
-    // }else{
-    //     return res.send('token')
-    // }
-    // 2.5解密
+    // 2.解密和密码验证
     let isPassword = bcrypt.compareSync(req.body.password, user.password)
-    
-    // 返回token
-    // const token = user._id + '.' + user.username
+    if(!isPassword){ return res.status(422).send('密码错误')}
 
     // jwt-token
     const { _id, username } = user
@@ -93,7 +68,6 @@ router.post('/login', async (req, res) => {
 
     res.send(token)
 })
-
 
 // 验证
 router.get('/verify', async (req, res) => {
