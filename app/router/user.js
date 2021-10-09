@@ -49,7 +49,7 @@ router.post('/register', async (req, res) => {
 
 // 登录
 router.post('/login', async (req, res) => {
-    // 1.查询用户是否存在
+    // 1.查询用户是否存在,如果存在则返回数据库中该用户的数据对象
     const user = await User.findOne({username: req.body.username})
 
     if(!user){ return res.status(422).send('该用户不存在') }
@@ -101,8 +101,6 @@ router.get('/verify', async (req, res) => {
     const { _id, username } = jwt.verify(token, secret)
     console.log(_id)
     */
-
-    
 })
 
 
