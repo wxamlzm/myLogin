@@ -38,12 +38,14 @@ router.get('/', isAdmin, async (req, res) => {
 
 // 注册
 router.post('/register', async (req, res) => {
+    console.log(req.body)
+    
     const user = await User.findOne({username: req.body.username})
 
     if(user){ return res.status(409).send('该用户已存在') }
 
     const newUser = await new User(req.body).save()
-
+    // console.log(newUser)
     res.send(newUser)
 })
 

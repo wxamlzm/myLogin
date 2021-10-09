@@ -49,7 +49,7 @@ export default {
                             {validator: validatePass, trigger: 'blur'}
                 ],
                 name: [{required: true, message: '用户名不得为空', trigger: 'blur'},
-                       {min: 3, max: 32, message: '长度应该在3-32之间', tigger: 'blur'}
+                       {min: 2, max: 32, message: '长度应该在2-32之间', tigger: 'blur'}
                 ]
             }
         }
@@ -58,7 +58,11 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    alert('submit!');
+                    console.log(this.registerData)
+                    const datastr = `username=${this.registerData.username}&password=${this.registerData.password}&name=${this.registerData.name}`
+                    this.$axios.post('/register', datastr).then(res => {
+                        console.log(res.data)
+                    })
                 } else {
                     console.log('error submit!!');
                     return false;
