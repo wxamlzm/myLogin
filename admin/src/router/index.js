@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Register from '../views/register.vue'
-import Index from '../views/index.vue'
-import Login from '../views/login.vue'
-import NotFound from '../views/404.vue'
+// import Register from '../views/register.vue'
+import Index from '../views/Index.vue'
+// import Login from '../views/login.vue'
+// import NotFound from '../views/404.vue'
 
 Vue.use(VueRouter)
 
@@ -20,17 +20,17 @@ const routes = [
   {
     path: '/register',
     name: 'Register',
-    component: Register
+    component: () => import( /* webpackChunkName: "Register" */ '../views/Register.vue')
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: () => import( /* webpackChunkName: "Login" */ '../views/Login.vue')
   },
   {
     path: '*',
     name: '404',
-    component: NotFound
+    component: () => import( /* webpackChunkName: "NotFound" */ '../views/NotFound.vue')
   }
 ]
 

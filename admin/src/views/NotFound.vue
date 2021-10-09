@@ -1,6 +1,6 @@
 <template>
     <div>
-        register
+        404
     </div>
 </template>
 
