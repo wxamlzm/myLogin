@@ -37,9 +37,7 @@ router.get('/', isAdmin, async (req, res) => {
 })
 
 // 注册
-router.post('/register', async (req, res) => {
-    console.log(req.body)
-    
+router.post('/register', async (req, res) => { 
     const user = await User.findOne({username: req.body.username})
 
     if(user){ return res.status(409).send('该用户已存在') }

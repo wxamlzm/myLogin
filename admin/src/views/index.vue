@@ -6,6 +6,11 @@
 
 <script>
 export default {
+    beforeMount(){
+        this.$axios.get('/').then( res => {
+            console.log(res.data)
+        })
+    }
     
 }
 </script>

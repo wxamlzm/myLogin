@@ -35,7 +35,8 @@ export default {
             registerData: {
                 username: '',
                 password: '',
-                password2: ''
+                password2: '',
+                name: ''
             },
             rules: {
                 username: [{required: true, message: '账号不得为空', trigger: 'blur'},
@@ -49,7 +50,7 @@ export default {
                             {validator: validatePass, trigger: 'blur'}
                 ],
                 name: [{required: true, message: '用户名不得为空', trigger: 'blur'},
-                       {min: 2, max: 32, message: '长度应该在2-32之间', tigger: 'blur'}
+                       {min: 2, max: 8, message: '长度应该在2-8之间', tigger: 'blur'}
                 ]
             }
         }
@@ -58,10 +59,14 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    console.log(this.registerData)
                     const datastr = `username=${this.registerData.username}&password=${this.registerData.password}&name=${this.registerData.name}`
                     this.$axios.post('/register', datastr).then(res => {
-                        console.log(res.data)
+                        // console.log(res.data)
+                        this.$message({
+                            type: 'success',
+                            message: '用户注册成功'
+                        })
+                        this.$router.push('/login')
                     })
                 } else {
                     console.log('error submit!!');
