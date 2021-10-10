@@ -10,7 +10,7 @@ const isAdmin = async (req, res, next) => {
     // jwt-token
     const token = req.headers.authorization.split(' ').pop()
 
-    // 查询用户是否存在
+    // 1. 解开token加密
     const { _id, username } = jwt.verify(token, secret)
 
     // 2.查询用户是否存在
@@ -54,7 +54,7 @@ router.post('/login', async (req, res) => {
 
     if(!user){ return res.status(422).send('该用户不存在') }
 
-    // 2.解密和密码验证
+    // 2.解密密码加密和密码验证
     let isPassword = bcrypt.compareSync(req.body.password, user.password)
     if(!isPassword){ return res.status(422).send('密码错误')}
 
